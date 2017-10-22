@@ -1,54 +1,35 @@
 import math
 
-EARTH_FLUX = 754361889825524406
-EARTH_RADIUS = 6371
+earth_radius = 6371000
+boltzmann_constant = 1.36 * 10 ** -23
+estrellas = {"O": float(33000), "B": float(10000), "A": float(75000), "F": float(6000), "G": float(5200), "K": float(3700)}
+exoplanet_radius = float(input("Radi exoplaneta: ")) * 69911000
+star_type = input("Tipus estrella: ").capitalize()
+earth_flux = 7.54 * 10 ** 14
+star_radius = float(input("Radi estrella: ")) * 695000000
 
 
-def IST(mbol, r):
-    print("mbol ist = ", mbol)
-    sfinal = calculate_s(mbol, r)
-    print("sfinal = ", sfinal)
-    primera_relacion = division_squared(sfinal, EARTH_FLUX)
-    print("primera relacion = ", primera_relacion)
-    segunda_relacion = division_squared(r, EARTH_RADIUS)
-    print("segunda relacion = ", segunda_relacion)
-    radicand =  primera_relacion + segunda_relacion
-    print("radicand = ", radicand)
-    final = 1 - math.sqrt(radicand / 2)
-    print("final = ", final)
-    return final
+def calculate_surface_area (r):
+    return 4 * math.pi * r ** 2
 
 
-def division_squared(x, y):
-    xmenosy = x - y
-    xmasy = x + y
-    print("x menos y = ", xmenosy)
-    print("x mas y = ", xmasy)
-    return (xmenosy / xmasy) ** 2
+def calculate_L (star_radius, star_type):
+    return estrellas[star_type] ** 4 * 4 * math.pi * star_radius ** 2 * boltzmann_constant
 
 
-def calculate_s(mbol, r):
-    print("mbol s = ", mbol)
-    surface_area = calculate_surface_area(r)
-    print("surface area = ", surface_area)
-    sfinal = calculate_L(mbol) / surface_area
-    print("S = ", sfinal)
-    return sfinal
+def calculate_exoplanet_fluxe (exoradius, L):
+    return L / calculate_exosurface(exoradius)
 
 
-def calculate_surface_area(r):
-    return 4 * math.pi * (r ** 2)
+def calculate_exosurface(exoradius):
+    return 4 * math.pi * exoradius ** 2
 
 
-def calculate_L(mbol):
-    print("mbol l = ", mbol)
-    lfinal = 10 ** ((mbol - 4.2)/-2.5)
-    print("lfinal = ", lfinal)
-    return lfinal
+def calculate_IST (exoplanet_radius, star_radius):
+    flux_exo = calculate_exoplanet_fluxe(exoplanet_radius, calculate_L(star_radius, star_type))
+    return  math.sqrt(
+        (((flux_exo - earth_flux)/(flux_exo + earth_flux)) ** 2) -
+        (((exoplanet_radius - earth_radius)/(exoplanet_radius + earth_radius)) ** 2)) * 100
 
 
-bolometric_magnitude = float(input("Por favor introduce la magnitud bolometrica: "))
-exo_radius = 1.6 #float(input("Por favor introduce el radio del exoplaneta: "))
-print(bolometric_magnitude)
-print(exo_radius)
-print(IST(bolometric_magnitude, exo_radius * 69911) * 100)
+print("L'índex de similitud amb la Terra és ", str(calculate_IST(exoplanet_radius, star_radius)), "%")
