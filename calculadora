@@ -1,0 +1,71 @@
+import math
+
+earth_radius = 6371000
+boltzmann_constant = 1.36 * 10 ** -23
+estrellas = {"O": float(33000), "B": float(10000), "A": float(75000), "F": float(6000), "G": float(5200),
+             "K": float(3700)}
+#exoplanet_radius = float(input("Radi exoplaneta: ")) * 69911000
+#star_type = input("Tipus estrella: ").capitalize()
+earth_flux = 2.618*10**18
+#star_radius =float(input("Radi estrella: ")) * 695000000
+#exo_orbit =float(input("Orbita media exoplaneta:")) * 146900000000
+
+
+# l'orbita de l'exoplaneta s''introdueix  en relació al radi interior de la terra en relació a  la  orbita exoplaneta. osea N(que introduces)=Orbita/118594.977
+
+def calculate_surface_area(r):
+    return 4 * math.pi * r ** 2
+
+
+def calculate_L(star_radius, star_type):
+    return estrellas[star_type] ** 4 * 4 * math.pi * star_radius ** 2 * boltzmann_constant
+
+
+def calculate_exoplanet_fluxe(exo_orbit, L):
+    return L / (2*math.pi*exo_orbit)
+
+
+
+
+def calculate_IST(exoplanet_radius, star_radius, star_type):
+
+    flux_exo = calculate_exoplanet_fluxe(exoplanet_radius, calculate_L(star_radius, star_type))
+
+    return math.sqrt((((flux_exo - earth_flux) / (flux_exo + earth_flux)) ** 2) -(((exoplanet_radius - earth_radius) / (exoplanet_radius + earth_radius)) ** 2)) * 100
+
+
+
+#print("L'índex de similitud amb la Terra és ", str(calculate_IST(exoplanet_radius, star_radius,star_type)), "%")
+
+"""if calculate_IST(exoplanet_radius, star_radius, star_type) > 90:
+    print("similitut important")
+else:
+    if calculate_IST(exoplanet_radius, star_radius, star_type) > 70:
+        print("poca similitut a la terra")
+    elif not calculate_IST(exoplanet_radius, star_radius,star_type) >= 50:
+        print("molt poca similitut a la terra")
+
+
+# ZONA HABITABILITAT
+def calculate_internal_radius(L):
+    print(str(math.sqrt((calculate_L(star_radius, star_type)) / 1.1)))
+    return math.sqrt((calculate_L(star_radius, star_type)) / 1.1)
+
+
+def calculate_external_radius(L):
+    return math.sqrt((calculate_L(star_radius, star_type)) / 0.5)
+
+def compare (calculate_external_radius, calculate_internal_radius):
+    if exo_orbit >= calculate_internal_radius(
+            calculate_L(star_radius, star_type)) and exo_orbit < calculate_external_radius(
+            calculate_L(star_radius, star_type)):
+        print("l'exoplaneta es troba a la zona d'habitabilitat")
+    else:
+        print(("l'exoplaneta no es troba a la zona d'habitabilitat"))
+
+if exo_orbit > calculate_internal_radius(calculate_L(star_radius, star_type)) and exo_orbit < calculate_external_radius(
+        calculate_L(star_radius, star_type)):
+    print("l'exoplaneta es troba a la zona d'habitabilitat")
+else:
+    print(("l'exoplaneta no es troba a la zona d'habitabilitat"))"""
+
